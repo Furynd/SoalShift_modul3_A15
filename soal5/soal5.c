@@ -65,6 +65,7 @@ int main(int argc, char *argv[]){
                     mvprintw(23, 30, "insufficient food..");
                     redrawwin(stdscr);
                 }
+                if(hunger>200)hunger=200;
                 break;
             
             case '2':
@@ -188,8 +189,8 @@ int battle(){
 }
 
 void shop(){
-    int stat = 0;
-    while(1){
+    int stat = 3;
+    while(stat){
         redrawwin(market);
         mvwprintw(market,0,0,"Food Market");
         mvwprintw(market,2,0, "Market stock\t: %d", *marketstock);
@@ -225,9 +226,9 @@ void shop(){
 
 void drawmain(){
     mvprintw(0,0,"Name\t: %s",name);
-    mvprintw(1,0,"Health\t: %.2f", health);
-    mvprintw(2,0,"Hunger\t: %.2f", hunger);
-    mvprintw(3,0,"Hygiene\t: %.2f", hygiene);
+    mvprintw(1,0,"Health\t: %d", (int)health);
+    mvprintw(2,0,"Hunger\t: %d", (int)hunger);
+    mvprintw(3,0,"Hygiene\t: %d", (int)hygiene);
     mvprintw(0,30,"Lifetime\t: %d seconds", lifetime/10);
     mvprintw(1,30,"Battles won\t: %d", wons);
     mvprintw(3,30,"%s", available);

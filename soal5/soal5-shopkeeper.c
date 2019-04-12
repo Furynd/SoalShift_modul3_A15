@@ -8,17 +8,10 @@
 
 key_t key = 5124;
 int *marketstock;
+pthread_t tid;
+int stat = 3;    
 
-int main(){
-    int stat = 3;
-    int shmid = shmget(key, sizeof(int), 0666);
-    marketstock = shmat(shmid, NULL, 0);
-    initscr();
-    cbreak();
-    noecho();
-    scrollok(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
-    
+void *updater(void* arg){
     while(stat){
         redrawwin(stdscr);
         mvprintw(0,0,"Food Market");
@@ -43,7 +36,21 @@ int main(){
         refresh();
         napms(100);    
     }
-    // shmdt(marketstock);
+}
+
+int main(){
+    int shmid = shmget(key, sizeof(int), 0666);
+    marketstock = shmat(shmid, NULL, 0);
+    initscr();
+    cbreak();
+    noecho();
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    
+    pthread_create(&tid, NULL, updater, NULL);
+
+    pthread_join(tid, NULL);
+    shmdt(marketstock);
     // shmctl(shmid, IPC_RMID, NULL);
     endwin();
     return 0;
